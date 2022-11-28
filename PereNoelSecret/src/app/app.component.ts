@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { PrimeNGConfig } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { AuthService } from './Services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +8,31 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'PereNoelSecret';
-  constructor(private primengConfig: PrimeNGConfig) {}
+  title = 'EGestion';
+  authenticatedSubscription : Subscription = <Subscription>{};
+  isLogged : boolean = this.authService.authenticated;
+  displaySideBar : boolean = false;
+
+  constructor(private authService : AuthService) {
+    this.authenticatedSubscription = this.authService.authenticatedSubject.subscribe((authenticated : boolean)=>{
+      this.isLogged = authenticated;
+    });
+  }
 
     ngOnInit() {
-        this.primengConfig.ripple = true;
+      this.isLogged = this.authService.isAuthenticated();
+    }
+
+    login(){
+
+    }
+    logout(){
+      this.authService.logout();
+      this.isLogged = this.authService.isAuthenticated();
+    }
+
+
+    ngOnDestroy() {
+      this.authenticatedSubscription.unsubscribe();
     }
 }

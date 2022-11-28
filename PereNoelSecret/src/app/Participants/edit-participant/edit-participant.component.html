@@ -1,0 +1,10 @@
+<div class="grid grid-nogutter">
+    <div class="col-12 mt-0 flex justify-content-center align-items-center">
+        <p-dropdown appendTo="body" [options]="listUsers" optionLabel="lastName" [(ngModel)]="participant.user" [filter]="true" placeholder="Select an user.">
+            
+        </p-dropdown>
+    </div>
+    <div class="col-12 mt-1 flex justify-content-end">
+        <button pButton type="button" label="Save" class="hover:shadow-2 p-button-success p-button-sm col-4" (click)="onSave()"></button>
+    </div>
+</div>

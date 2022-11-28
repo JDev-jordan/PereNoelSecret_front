@@ -1,0 +1,35 @@
+<div class="grid">
+    <p-dialog position="top" [(visible)]="display_editEventDialog" [modal]="true" (onHide)="onHideEditEventDialog()">
+        <div class="grid mt-5">
+            <app-edit-event [event]="eventEdit"></app-edit-event>
+        </div>
+    </p-dialog>
+    <p-dataView [value]="listEvents" class="col-12">
+        <ng-template pTemplate="header">
+            <div class="grid">
+                <div class="col-3 flex justify-content-start align-items-center">
+                    List of Events
+                </div>
+                <div class="col-9 flex justify-content-start">
+                    <button pButton pRipple type="button" label="New Event" icon="pi pi-plus" class="align-self-center p-button-text p-button-success " (click)="onNewEvent()"></button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template let-event pTemplate="listItem">
+            
+                <p-card class="hover:shadow-2 sm:col-6 md:col-3 lg:col-2 white-space-nowrap card-success">
+                    <ng-template pTemplate="content">
+                        {{event.title}} 
+                    </ng-template>
+                    
+                    <ng-template pTemplate="footer">
+                        <div class="flex justify-content-end">
+                            <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-sm p-button-rounded p-button-success p-button-text col-1" (click)="onShowEditEventDialog(event)"></button>
+                            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-sm p-button-rounded p-button-danger p-button-text  col-1"></button>
+                        </div>
+                    </ng-template>
+                </p-card>
+            
+        </ng-template>
+    </p-dataView>
+</div>

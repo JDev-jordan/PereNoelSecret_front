@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { User } from 'src/app/Interfaces/user';
 import { UserService } from 'src/app/Services/user.service';
 
@@ -9,14 +10,36 @@ import { UserService } from 'src/app/Services/user.service';
 })
 export class ListUsersComponent implements OnInit {
 
+  listUsersSubscription : Subscription = <Subscription>{}; 
   listUsers : User[] = [];
+  display_editUserDialog: boolean = false;
+  userEdit : User = {lastName:"", firstName:"", email:"", password:"", roles:[]};
 
   constructor(private userService : UserService) { }
 
   ngOnInit(): void {
-    this.userService.getAll().subscribe((data)=>{
-      this.listUsers = data;
+    this.listUsersSubscription = this.userService.listUsersSubject.subscribe((listUsers : User[])=>{
+      this.listUsers = listUsers;
+      this.userEdit = {lastName:"", firstName:"", email:"", password:"", roles:[]};
     });
+  }
+
+  onShowEditUser(user: User){
+    this.userEdit = user;
+    this.display_editUserDialog = true;
+  }
+
+  onHideEditUserDialog(){
+    this.userService.refreshUsers();
+  }
+
+  onNewUser(){
+    this.userEdit = {lastName:"", firstName:"", email:"", password:"", roles:[]};
+    this.display_editUserDialog = true;
+  }
+
+  ngOnDestroy() {
+    this.listUsersSubscription.unsubscribe();
   }
 
 }

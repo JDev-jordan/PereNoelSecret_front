@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { User } from '../Interfaces/user';
 
 @Injectable({
@@ -8,11 +8,31 @@ import { User } from '../Interfaces/user';
 })
 export class UserService {
 
-  constructor(private http : HttpClient) { }
+  listUsersSubject = new Subject<User[]>();
+  listUsers : User[] = [];
 
-  url : string = "http://localhost:8080/";
+  constructor(private http : HttpClient) { 
+    this.refreshUsers();
+  }
+
+  url : string = "http://localhost:8080/users";
 
   getAll() : Observable<User[]>{
-    return this.http.get<User[]>(this.url+"users");
+    return this.http.get<User[]>(this.url);
+  }
+
+  saveUser(user: User) : Observable<User>{
+    return this.http.post<User>(this.url, user);
+  }
+
+  refreshUsers(){
+    this.getAll().subscribe(users=>{
+      this.listUsers = users;
+      this.emitUsersSubject();
+    })
+  }
+
+  emitUsersSubject(){
+    this.listUsersSubject.next(this.listUsers.slice());
   }
 }

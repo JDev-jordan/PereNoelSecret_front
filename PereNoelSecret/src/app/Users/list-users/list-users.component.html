@@ -1,3 +1,33 @@
-
-
-
+<div class="grid">
+    <p-dialog position="top" [(visible)]="display_editUserDialog" [modal]="true" (onHide)="onHideEditUserDialog()">
+        <div class="grid mt-5">
+            <app-edit-user [user]="userEdit"></app-edit-user>
+        </div>
+    </p-dialog>
+    <p-dataView [value]="listUsers" class="col-12">
+        <ng-template pTemplate="header">
+            <div class="grid">
+                <div class="col-3 flex justify-content-start align-items-center">
+                    List of Users
+                </div>
+                <div class="col-9 flex justify-content-start">
+                    <button pButton pRipple type="button" label="New User" icon="pi pi-plus" class="align-self-center p-button-text p-button-success " (click)="onNewUser()"></button>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template let-user pTemplate="listItem">
+            <p-card class="hover:shadow-2 m-2">
+                <ng-template pTemplate="content">
+                    {{user.firstName}} {{user.lastName}}
+                </ng-template>
+                
+                <ng-template pTemplate="footer">
+                    <div class="flex justify-content-end">
+                        <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-sm p-button-rounded p-button-success p-button-text col-1" (click)="onShowEditUser(user)"></button>
+                        <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-sm p-button-rounded p-button-danger p-button-text  col-1"></button>
+                    </div>
+                </ng-template>
+            </p-card>
+        </ng-template>
+    </p-dataView>
+</div>
